@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package grpc;
+
+service ChatServer {
+  rpc New_messege(Message) returns (stream Message);
+  rpc Send_messge(Message) returns (Blank);
+  rpc New_user(User) returns (Blank);
+}
+
+message Blank {
+  
+}
+
+message Message {
+  string name = 1;
+  string note = 2;
+}
+
+message User {
+  string name=1;
+}
+
