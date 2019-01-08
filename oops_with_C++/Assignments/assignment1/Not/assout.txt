@@ -1,0 +1,42 @@
+// Example program
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main()
+{
+    int Fp=0;
+    int P=1;
+    int Ts=1;
+    int F=1;
+    int Cu=10;
+    
+  string name;
+ cout << "Where\t   Cum. steps  Water amt.  Cum. step-units"<< endl;
+ cout << "---------  ----------  ----------  ---------------\n" ;
+ if (Fp>0)
+ {cout <<"Plant  "<< P<< "      ";
+ }
+ else if (Fp==0)
+ {
+     cout<< "FAUCET        ";
+ }
+ 
+ if (Ts<=9 && Cu<=9)
+ {cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+ }
+ else if (Ts>9 && Cu<=9)
+ {
+     cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+ }
+ else if (Ts<=9 && Cu>9)
+ {
+     cout<<" " << Ts<<"\t   "<<F<<"\t\t "<<Cu<<"\n";
+ }
+ else if (Ts>9 && Cu>9)
+ {
+     cout<< Ts<<"\t   "<<F<<"\t\t "<<Cu<<"\n";
+ }
+
+
+}

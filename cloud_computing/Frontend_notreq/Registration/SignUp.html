@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration</title>
+	<link rel="stylesheet" type="text/css" href="signUp_css.css">
+	<script type="text/javascript" src="signUp_js.js"></script>
+</head>
+<body>
+	<h1>Application Name</h1>
+
+<form name='signUp' onSubmit="return formValidation();">
+	<h1>SignUp</h1>
+	<ul>
+		<li><label>User id:</label><span>*</span></li>
+		<li><input type="text" name="userid" size="20" /></li>
+		
+		<li><label>Password:</label><span>*</span></li>
+		<li><input type="password" name="passid" size="20" /></li>
+			
+		<li><label>First Name:</label><span>*</span></li>
+		<li><input type="text" name="firstName" size="20" /></li>
+
+		<li><label>Last Name:</label><span>*</span></li>
+		<li><input type="text" name="lastName" size="20" /></li>
+		
+		<li><label>Email:</label><span>*</span></li>
+		<li><input type="text" name="email" size="20" /></li>
+		
+		<li><label id="Institution">Institution: </label></li>
+		<li><input type="text" name="email" size="20" /></li>
+		<li>fields with * are required</li>
+		<li><input type="submit" name="submit" value="Submit" /></li>
+	</ul>
+</form>
+
+</body>
+</html>

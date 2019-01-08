@@ -1,0 +1,288 @@
+#include <iostream>
+using namespace std;
+
+int main()
+{   
+   int plant_count;
+   input >> plant_count;
+   
+   
+        cout << endl;
+        cout << "==========================" << endl;
+        cout << " Plan Near with " << plant_count << " plants" << endl;
+        cout << "==========================" << endl;
+        cout << endl;
+        
+        int P=0;
+		int S=0;
+		int F=3;
+		int Fp=0;
+		int Ts=0;
+		int Su=0;
+		int Cu=0;
+		int Cu_near=0;
+		int Cu_far=0;
+
+		cout << "Where\t   Cum. steps  Water amt.  Cum. step-units"<< endl;
+		cout << "---------  ----------  ----------  ---------------\n" ;
+
+	while (P<plant_count)
+	{
+		
+		if (F>0)
+		{
+			S=1;
+			Su=(S*F);
+			Fp=Fp+1;
+			Ts=Ts+S;
+			Cu=Cu+Su;
+			P=P+1;
+			
+			if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+
+			F=F-1;
+		}
+		else if ( F==0)
+		{
+			S=Fp;
+			Su= (S*F);
+			Fp=0;
+			Ts=Ts+S;
+			
+			if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				
+				F=3;
+				S=P;
+				Ts=Ts+S;
+				Su=(S*F);
+				Cu=Cu+Su;
+				Fp=P;
+		}
+	}
+if (P==plant_count)
+{
+    S=P;
+    Ts=Ts+S;
+    Su=(S*F);
+    Cu=Cu+Su;
+	Fp=0;
+	P=0;
+	if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+}
+Cu_near=Cu;
+
+cout << endl<< "Plan Near: Total steps = "<< Ts << ", total step-units = "<< Cu<<" \n";
+        // Plan Far
+
+        cout << endl;
+        cout << "=========================" << endl;
+        cout << " Plan Far with " << plant_count << " plants" << endl;
+        cout << "=========================" << endl;
+        cout << endl;
+        
+		
+		cout << "Where      Cum. steps  Water amt.  Cum. step-units" << endl;
+        cout << "---------  ----------  ----------  ---------------" << endl;
+	
+	P=plant_count;
+	S=0;
+	F=3;
+	Fp=0;
+	Ts=0;
+	Su=0;
+	Cu=0;
+	
+	
+	
+	
+	while (P>0)
+	{
+		if (F>0)
+		{
+			if(Fp==0)
+			{
+				S=P;
+				Ts=Ts+S;
+				Su=(S*F);
+				Cu=Cu+Su;
+				Fp=P;
+				
+				if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				
+				F=F-1;
+			}
+			S=1;
+			Ts=Ts+S;
+			Su=(S*F);
+			Cu=Cu+Su;
+			Fp=Fp-1;
+			P=P-1;
+			
+			if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				
+			F=F-1;
+		}
+		else if ( F==0)
+		{
+			S=P;
+			Su=(S*F);
+			Fp=0;
+			Ts=Ts+S;
+			Cu=Cu+Su;
+			
+			if (Fp>0)
+				{cout <<"Plant  "<< P<< "      ";
+				}
+				else if (Fp==0)
+				{
+					cout<< "FAUCET        ";
+				}
+				
+				if (Ts<=9 && Cu<=9)
+				{cout<<" "<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";;
+				}
+				else if (Ts>9 && Cu<=9)
+				{
+					cout<< Ts<<"\t   "<<F<<" \t\t "<<Cu<<"\n";
+				}
+				else if (Ts<=9 && Cu>9)
+				{
+					cout<<" " << Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				else if (Ts>9 && Cu>9)
+				{
+					cout<< Ts<<"\t   "<<F<<"\t\t"<<Cu<<"\n";
+				}
+				
+				F=3;
+				P = P-1;
+		}
+	}
+Cu_far=Cu;
+cout << endl<<"Plan Far : Total steps = "<< Ts << ", total step-units = "<< Cu<<" \n";
+        
+		// Which plan is better? Better means fewer step-units.
+        cout << endl;
+        cout << "*** With " << plant_count << " plants, ";
+		if (Cu_far>Cu_near)
+		{
+			cout<< "Plan Near is better with "<< (Cu_far - Cu_near)<< " fewer step-units.\n";
+		}
+        	else if (Cu_far < Cu_near)
+		{
+			cout<< "Plan Far is better with "<< (Cu_near - Cu_far)<< " fewer step-units.\n";
+		}
+        /*** Complete the code to determine the better plan. ***/
+return (0);
+		
+}

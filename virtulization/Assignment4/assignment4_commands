@@ -1,0 +1,15 @@
+sudo apt-get update
+sudo apt-get upgrade
+
+clone https://github.com/torvalds/linux.git
+
+cd linux/
+
+git log 
+
+copy the first commit id: 
+commit 625e2001e99e82ea3eb5b0370a428a4328b9166b
+
+
+
+edit the file vmx.c   '{static int vmx_handle_exit(struct kvm_vcpu *vcpu)  } function to get the result prited

@@ -1,0 +1,97 @@
+mpf_set_ui (a1,1);	
+mpf_div_ui (an,a1,3);		//void mpf_div_ui (mpf_t rop, mpf_t op1 , mpir_ui op2 )
+
+mpf_sqrt_ui (r1,3);			//void mpf_sqrt_ui (mpf_t rop, mpir_ui op)
+mpf_sub_ui (r2,r1,1);		//void mpf_sub_ui (mpf_t rop, mpf_t op1, mpir_ui op2 )
+mpf_div_ui (rn,r2,2);		//void mpf_div_ui (mpf_t rop, mpf_t op1 , mpir_ui op2 )
+
+//mpf_set_ui (s1,1);
+mpf_pow_ui (s1,rn,3);		//void mpf_pow_ui (mpf_t rop , mpf_t op1 , mpir_ui op2 )
+mpf_ui_sub (s2,1,s1);			//void mpf_div (mpf_t rop , mpf_t op1 , mpf_t op2 )
+cube_root (sn,s2);		//void mpf_pow_ui (mpf_t rop , mpf_t op1 , mpir_ui op2 )
+
+int po;
+
+mpf_mul_ui (t1,rn,2);		//void mpf_mul_ui (mpf_t rop, mpf_t op1, mpir_ui op2 ) 
+mpf_ui_add (tn,1,t);
+
+mpf_pow_ui (u1,rn,2);
+mpf_add (u2, rn,u1);
+mpf_add_ui (u3,u2,1);
+mpf_mul (u4,u3,rn);
+mpf_mul_ui (u5,u4,9);
+cube_root (un,u5);
+
+mpf_pow_ui (v1,tn,2);
+mpf_mul (v2,tn,un);
+mpf_pow_ui (v3,un,2);
+mpf_add (v4,v1,v2);
+mpf_add (vn,v4,v3);
+
+
+mpf_pow_ui (w1,sn,2);
+mpf_add (w2,sn,w1);
+mpf_add_ui (w3,w2,1);
+mpf_mul_ui(w4,w3,27);
+mpf_div (wn,w4,vn);	
+
+mpf_ui_sub (an1,1,wn);
+mpf_set (an2,3);
+po=(2*i)-1;		//unsigned long  int mpz_get_ui (mpz_t) refere pafe 23.
+mpf_pow_ui (an3,an2,po);
+mpf_mul (an4,an3,an1)
+mpf_mul (an5,wn,an);
+mpf_add (an,an5,an4);
+
+mpf_un_sub (sn1,1,rn);
+mpf_pow_ui (sn2,sn1,3);
+mpf_mul_ui (sn3,un,2);
+mpf_add (sn4,tn,sn3);
+mpf_mul (sn5,sn4,vn);
+mpf_div (sn,sn2,sn5);
+
+mpf_pow_ui (rn1,sn,3);
+mpf_ui_sub (rn2,1,rn1);
+cube_root (rn,rn2);
+
+
+						
+
+
+
+
+
+
+
+
+void cube_root(mpf_t& x, const mpf_t a)
+{
+	mpf_t st,stn,std,an,num,den;
+	mpf_init (st);
+	mpf_init (stn);
+	mpf_init (std);
+	mpf_init (an);
+	mpf_init (num);
+	mpf_init (den);
+	mpf_init (z);
+	//mpf_init (num);
+	
+	
+	mpf_set_ui (st,3);
+
+	for (int i=1,i<4;i++)
+	{
+		mpf_pow_ui(stn,st,3);			
+		mpf_mul_ui (std,stn,2);
+		mpf_mul (an,a,2);
+		mpf_add (num,stn,an);
+		mpf_add (den,std,a);
+		mpf_div (z,num,den);
+		mpf_mul (x,st,x);
+			if (i<4)
+			{
+				mpf_set (st,x);
+			}
+	}
+	
+}

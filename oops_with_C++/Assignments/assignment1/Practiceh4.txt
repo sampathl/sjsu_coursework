@@ -1,0 +1,83 @@
+# include <iostream>
+using namespace std;
+
+int main()
+{
+	cout << "n: " << endl ;
+	long int n;
+	cin >> n ;
+	long int n1=n;
+	int d=0;
+	int r1=0;
+	int counter=0;
+	int r2=0;
+	long int n2=n;
+	int count2=0;
+	int z=0;
+	
+	
+	while (n1!=0)
+	{
+		d=d+1;
+		n1=n1/10;
+	}
+	int d1=d;
+	int d2;
+	n1=n;
+	
+	while (d1!=0)
+	{
+		r1=n1%10;
+		d2=d1-1;
+		n2=n1/10;
+		while(d2!=0)
+		{
+			r2=n2%10;
+			if (r1==r2)
+			{
+				counter=counter+1;
+			}
+			if (r1!=r2)
+			{ break;}
+			
+			d2=d2-1;
+			n2=n2/10;
+		}	
+		    if(counter >= count2)
+		    { count2=counter;
+		       z=r1;
+		    }
+		counter=0;
+		
+	    d1=d1-1;
+	    n1=n1/10;
+	} 
+	
+	count2=count2+1;
+	counter=count2;
+	int u=1;
+   
+   int v=0; 
+if (z!=0)
+{
+     v=1;
+	while (counter>1) 
+	{
+	    if (counter>1)
+	    {
+	        u=u*10;
+	        v=v+u;        
+	    }
+	    
+	counter=counter-1;
+	}
+	v=v*z;
+	
+}
+if (count2==1)
+{v=z;
+    cout << "count0: " << v << endl;
+}
+	    cout << "count: " << count2 << endl;
+	    cout << v<< endl;
+}

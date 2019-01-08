@@ -1,0 +1,263 @@
+
+#include <iostream>
+#include <iomanip>
+#include <stdio.h>
+#include <cmath>
+#include <mpir.h>
+#include <stdlib.h>
+#include <string.h>
+
+using namespace std;
+
+const int MAX_ITERATIONS = 100;
+const int PLACES         = 100000;        // desired decimal places
+const int PRECISION      = PLACES + 1;  // +1 for the digit 3 before the decimal
+
+const int BASE       = 10;  // base 10 numbers
+const int BIT_COUNT  = 8;   // bits per machine word
+
+const int BLOCK_SIZE = 10;                // print digits in blocks
+const int LINE_SIZE  = 100;               // digits to print per line
+const int GROUP_SIZE = 5;                 // line grouping size
+
+void print(const mpf_t& pi);
+void cube_root(mpf_t& x, const mpf_t a);
+
+int main()
+{
+	mpf_set_default_prec(BIT_COUNT*PRECISION);    // precision in bits
+	mpf_t a_1,a_n,a_n_1,a_n_2,a_n_3,a_n_4,a_n_5;   // initializing all the used variables.
+	mpf_t r_1,r_2,r_n,r_n_1,r_n_2;
+	mpf_t s_1,s_2,s_n,s_n_1,s_n_2,s_n_3,s_n_4,s_n_5;
+	mpf_t t_1,t_n;
+	mpf_t u_1,u_2,u_3,u_4,u_5,u_n;
+	mpf_t v_1,v_2,v_3,v_4,v_n;
+	mpf_t w_1,w_2,w_3,w_4,w_n;
+	mpf_t pi;
+	mpf_t one; 				
+	mpf_t two; 				
+	mpf_t three;			
+	mpf_t nine;				
+	mpf_t twenty_seven;		
+		
+	mpf_init (a_1);
+	mpf_init (a_n);
+	mpf_init (r_1);
+	mpf_init (r_2);
+	mpf_init (r_n);
+	mpf_init (s_1);
+	mpf_init (s_2);
+	mpf_init (s_n_2);
+	mpf_init (t_1);
+	mpf_init (t_n);
+	mpf_init (u_1);
+	mpf_init (u_2);
+	mpf_init (u_3);
+	mpf_init (u_4);
+	mpf_init (u_5);
+	mpf_init (u_n);
+	mpf_init (v_1);
+	mpf_init (v_2);
+	mpf_init (v_3);
+	mpf_init (v_4);
+	mpf_init (v_n);
+	mpf_init (w_1);
+	mpf_init (w_2);
+	mpf_init (w_3);
+	mpf_init (w_4);
+	mpf_init (w_n);
+	mpf_init (a_n_1);
+	mpf_init (a_n_2);
+	mpf_init (a_n_3);
+	mpf_init (a_n_4);
+	mpf_init (a_n_5);
+	mpf_init (s_n_1);
+	mpf_init (s_n_2);
+	mpf_init (s_n_3);
+	mpf_init (s_n_4);
+	mpf_init (s_n_5);
+	mpf_init (r_n_1);
+	mpf_init (r_n_2);
+	mpf_init (pi);
+	mpf_t power3;
+	mpf_init(power3);
+	mpf_init_set_str(one,"1", BASE);
+    mpf_init_set_str(two, "2", BASE);
+    mpf_init_set_str(three, "3", BASE);
+	mpf_init_set_str(nine, "9", BASE);	
+	mpf_init_set_str(twenty_seven,"27", BASE);
+	
+	mpf_div (a_1,one,three);
+	mpf_set (a_n,a_1);		//void mpf_div_ui (mpf_t rop, mpf_t op1 , mpir_ui op2 )
+	
+	mpf_sqrt (r_1,three);			//void mpf_sqrt_ui (mpf_t rop, mpir_ui op)
+	mpf_sub (r_2,r_1,one);		//void mpf_sub_ui (mpf_t rop, mpf_t op1, mpir_ui op2 )
+	mpf_div (r_n,r_2,two);		//void mpf_div_ui (mpf_t rop, mpf_t op1 , mpir_ui op2 )
+	
+	//mpf_set_ui (s_1,r_n,r_n);
+	mpf_pow_ui (s_1,r_n,three);		//void mpf_pow_ui (mpf_t rop , mpf_t op1 , mpir_ui op2 )
+	mpf_ui_sub (s_2,one,s_1);			//void mpf_div (mpf_t rop , mpf_t op1 , mpf_t op2 )
+	cube_root (s_n,s_2);		//void mpf_pow_ui (mpf_t rop , mpf_t op1 , mpir_ui op2 )
+	
+	//int po;
+	mpf_set(power3, a_1);
+	//Iterating the given formulae for '6' times.
+    for (int i = 0; i < MAX_ITERATIONS; i++)
+	   {
+	   	mpf_add (t_1,r_n,rn);		//void mpf_mul_ui (mpf_t rop, mpf_t op1, mpir_ui op2 ) 
+		mpf_add (t_n,one,t_1);
+		
+		mpf_mul (u_1,r_n,r_n);
+		mpf_add (u_2, r_n,u_1);
+		mpf_add (u_3,u_2,one);
+		mpf_mul (u_4,nine,r_n);
+		mpf_mul (u_5,u_4,u_3);
+		cube_root (u_n,u_5);
+		
+		mpf_mul (v_1,t_n,t_n,);
+		mpf_mul (v_2,t_n,u_n);
+		mpf_mul (v_3,u_n,u_n);
+		mpf_add (v_4,v_1,v_2);
+		mpf_add (v_n,v_4,v_3);
+		
+		
+		mpf_mul (w_1,s_n,s_n);
+		mpf_add (w_2,s_n,w_1);
+		mpf_add (w_3,w_2,one);
+		mpf_mul (w_4,w_3,twenty_seven);
+		mpf_div (w_n,w_4,v_n);	
+		
+		mpf_sub (a_n_1,one,w_n);
+		mpf_set (a_n_2,three);
+				//unsigned long  int mpz_get_ui (mpz_t) refere pafe 23.
+
+		mpf_mul (a_n_4,power3,a_n_1);
+		mpf_mul (a_n_5,w_n,a_n);
+		mpf_add (a_n,a_n_5,a_n_4);
+		
+		mpf_sub (s_n_1,one,r_n);
+		mpf_mul (s_n_2,s_n_1,s_n_1);
+		mpf_mul (s_n_2,s_n_2,s_n_1);
+		mpf_add (s_n_3,u_n,u_n);
+		mpf_add (s_n_4,t_n,s_n_3);
+		mpf_mul (s_n_5,s_n_4,v_n);
+		mpf_div (s_n,s_n_2,s_n_5);
+		
+		mpf_mul (r_n_1,s_n_1,s_n);
+		mpf_mul (r_n_1,r_n_1,s_n);
+		mpf_sub (r_n_2,one,r_n_1);
+		cube_root (r_n,r_n_2);
+		
+		mpf_ui_div (pi,one,a_n);
+		
+		mpf_mul(power3, power3, nine);
+		
+	   }
+    print(pi);
+    return 0;
+}
+
+/*Converting the obtained 'pi' value as string and assigning it to a pointer.
+ * then printing the output values with required dimensions.
+*/
+void print(const mpf_t& pi)
+{
+	char *ptr;
+	mp_exp_t expptr;;
+	ptr = mpf_get_str (NULL, &expptr, BASE, 0, pi);
+	cout << "3.";
+	for(int i=1; i < PRECISION; i++)
+	{
+		if(i%(GROUP_SIZE*LINE_SIZE) > 0)
+		{
+			if(i%LINE_SIZE > 0)
+			{
+				if(i%BLOCK_SIZE != 0)
+				{
+					cout << ptr[i];
+				}
+				else
+			    {
+					cout << ptr[i];
+					cout << " ";
+			    }
+			}
+			else
+			{
+				if(i%BLOCK_SIZE > 0)
+				{
+					cout << ptr[i];
+				}
+				else
+			    {
+					cout << ptr[i];
+				}
+				cout << "\n  ";
+			}
+		}
+		else
+		{
+			if(i%LINE_SIZE > 0)
+			{
+				if(i%BLOCK_SIZE != 0)
+				{
+					cout << ptr[i];
+				}
+				else
+			    {
+					cout << ptr[i];
+					cout << " ";
+			    }
+			}
+			else
+			{
+				if(i%BLOCK_SIZE > 0)
+				{
+					cout << ptr[i];
+				}
+				else
+			    {
+					cout << ptr[i];
+				}
+				cout << "\n  ";
+			}
+			cout << "\n  ";
+		}
+	}
+
+}
+
+void cube_root(mpf_t& x, const mpf_t a)
+{
+	mpf_t st,stn,std,a_n,num,den,z,three;
+	mpf_init (st);
+	mpf_init (stn);
+	mpf_init (std);
+	mpf_init (a_n);
+	mpf_init (num);
+	mpf_init (den);
+	mpf_init (z);
+	mpf_init (three);
+	
+	mpf_set_str (three,"3",BASE);
+	
+	
+	mpf_set_ui (st,three);
+
+	for (int i=1;i<4;i++)
+	{
+		mpf_pow_ui(stn,st,3);			
+		mpf_mul_ui (std,stn,2);
+		mpf_mul_ui (a_n,a,2);
+		mpf_add (num,stn,a_n);
+		mpf_add (den,std,a);
+		mpf_div (z,num,den);
+		mpf_mul (x,st,z);
+			if (i<4)
+			{
+				mpf_set (st,x);
+			}
+	}
+	
+}
+

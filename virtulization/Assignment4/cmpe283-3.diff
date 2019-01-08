@@ -1,0 +1,168 @@
+diff --git a/arch/x86/kvm/vmx.c b/arch/x86/kvm/vmx.c
+index c766880..05c6366 100644
+--- a/arch/x86/kvm/vmx.c
++++ b/arch/x86/kvm/vmx.c
+@@ -57,6 +57,7 @@
+ #include "trace.h"
+ #include "pmu.h"
+ #include "vmx_evmcs.h"
++#include <linux/string.h> //for exit_id
+ 
+ #define __ex(x) __kvm_handle_fault_on_reboot(x)
+ #define __ex_clear(x, reg) \
+@@ -65,6 +66,21 @@
+ MODULE_AUTHOR("Qumranet");
+ MODULE_LICENSE("GPL");
+ 
++
++uint64_t start_time=0; //start time for counter
++uint64_t end_time=0; // end time for the counter
++uint64_t time_spent=0; //total time spent 
++uint64_t ind_counter[65]={0};  //individual exit counter
++uint64_t ind_max_t[65]={0}; //indidvidual max exit time 
++uint64_t ind_min_t[65]={0};// indidvidual min min time
++uint64_t ind_avg_t[65]={0};// individual average exit time
++uint64_t cycles_counter=0; //counter for total cycles
++char *exit_id[65]; // array of strings
++/* exit ids */
++ 
++int exits_counter=0;// counter for all exits
++int a=1;//for loop variable declaration 
++
+ static const struct x86_cpu_id vmx_cpu_id[] = {
+ 	X86_FEATURE_MATCH(X86_FEATURE_VMX),
+ 	{}
+@@ -9136,7 +9152,7 @@ static void dump_vmcs(void)
+  * The guest has exited.  See if we can fix it or if we need userspace
+  * assistance.
+  */
+-static int vmx_handle_exit(struct kvm_vcpu *vcpu)
++static int vmx_handle_exit(struct kvm_vcpu *vcpu)  //this function has to be modified
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	u32 exit_reason = vmx->exit_reason;
+@@ -9220,11 +9236,122 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu)
+ 			vmx->loaded_vmcs->soft_vnmi_blocked = 0;
+ 		}
+ 	}
++//implement time counter and print
++
++	 exit_id[0]= "EXCEPTION_NMI";
++	 exit_id[1]= "EXTERNAL_INTERRUPT";
++	 exit_id[2]= "TRIPLE_FAULT";
++	 exit_id[3]= "Check*******"; //for verification remove at the end 
++	 exit_id[4]= "Check*******";
++	 exit_id[5]= "Check*******";
++	 exit_id[6]= "Check*******";
++	 exit_id[7]= "PENDING_INTERRUPT";
++	 exit_id[8]= "NMI_WINDOW";
++	 exit_id[9]= "TASK_SWITCH";
++	 exit_id[10]= "CPUID";
++	 exit_id[11]= "Check*******";
++	 exit_id[12]= "HLT";
++	 exit_id[13]= "INVD";
++	 exit_id[14]= "INVLPG";
++	 exit_id[15]= "RDPMC";
++	 exit_id[16]= "RDTSC";
++	 exit_id[17]= "Check*******";
++	 exit_id[18]= "VMCALL";
++	 exit_id[19]= "VMCLEAR";
++	 exit_id[20]= "VMLAUNCH";
++	 exit_id[21]= "VMPTRLD";
++	 exit_id[22]= "VMPTRST";
++	 exit_id[23]= "VMREAD";
++	 exit_id[24]= "VMRESUME";
++	 exit_id[25]= "VMWRITE";
++	 exit_id[26]= "VMOFF";
++	 exit_id[27]= "VMON";
++	 exit_id[28]= "CR_ACCESS";
++	 exit_id[29]= "DR_ACCESS";
++	 exit_id[30]= "IO_INSTRUCTION";
++	 exit_id[31]= "MSR_READ";
++	 exit_id[32]= "MSR_WRITE";
++	 exit_id[33]= "INVALID_STATE";
++	 exit_id[34]= "MSR_LOAD_FAIL";
++	 exit_id[35]= "Check*******";
++	 exit_id[36]= "MWAIT_INSTRUCTION";
++	 exit_id[37]= "MONITOR_TRAP_FLAG";
++	 exit_id[38]= "Check*******";
++	 exit_id[39]= "MONITOR_INSTRUCTION";
++	 exit_id[40]= "PAUSE_INSTRUCTION";
++	 exit_id[41]= "MCE_DURING_VMENTRY";
++	 exit_id[42]= "Check*******";
++	 exit_id[43]= "TPR_BELOW_THRESHOLD";
++	 exit_id[44]= "APIC_ACCESS";
++	 exit_id[45]= "EOI_INDUCED";
++	 exit_id[46]= "GDTR_IDTR";
++	 exit_id[47]= "LDTR_TR";
++	 exit_id[48]= "EPT_VIOLATION";
++	 exit_id[49]= "EPT_MISCONFIG";
++	 exit_id[50]= "INVEPT";
++	 exit_id[51]= "RDTSCP";
++	 exit_id[52]= "PREEMPTION_TIMER";
++	 exit_id[53]= "INVVPID";
++	 exit_id[54]= "WBINVD";
++	 exit_id[55]= "XSETBV";
++	 exit_id[56]= "APIC_WRITE";
++	 exit_id[57]= "RDRAND";
++	 exit_id[58]= "INVPCID";
++	 exit_id[59]= "VMFUNC";
++	 exit_id[60]= "ENCLS";
++	 exit_id[61]= "RDSEED";
++	 exit_id[62]= "PML_FULL";
++	 exit_id[63]= "XSAVES";
++	 exit_id[64]= "XRSTORS";
++
++	 exits_counter++; //exit_counter increment
+ 
+ 	if (exit_reason < kvm_vmx_max_exit_handlers
+ 	    && kvm_vmx_exit_handlers[exit_reason])
+-		return kvm_vmx_exit_handlers[exit_reason](vcpu);
+-	else {
++	{
++		ind_counter[(int)exit_reason]++;
++		start_time=rdtsc(); //start time using time stamp counter 
++		
++		int return_handler= kvm_vmx_exit_handlers[exit_reason](vcpu); //
++
++		end_time=rdtsc(); 
++		time_spent=end_time-start_time; // time difference
++		cycles_counter=cycles_counter+time_spent; //total cycles counter
++
++		if(time_spent>0)
++			{
++				if(time_spent < ind_min_t[exit_reason] || ind_min_t[exit_reason]==0 ) //individual min time 
++						ind_min_t[exit_reason]=time_spent;
++
++				if(ind_avg_t[exit_reason]!=0  && ind_counter[exit_reason]>1)  //individual avg time calculation if not 0
++				{
++					ind_avg_t[exit_reason] = (time_spent + (ind_avg_t[exit_reason]*(ind_counter[exit_reason]-1)))/ind_counter[exit_reason];
++				}
++				else
++					ind_avg_t[exit_reason] = time_spent;// individual avg time if 0 previously
++
++				if( time_spent > ind_max_t[exit_reason] || ind_max_t[exit_reason]==0 )  //individual max time 
++						ind_max_t[exit_reason] = time_spent;
++			}
++
++		if(exits_counter%500==0)
++		{ 
++			printk("**************************\n Total Exits %d \n",exits_counter);
++
++			for(a=1;a<65;a++)
++			{
++				if(ind_counter[a] > 0)
++				printk("Exit Reason:%-20s \t Exits: %lld \t Max: %lld Min: %lld Avg: %lld \n", exit_id[a], ind_counter[a],ind_max_t[a],ind_min_t[a],ind_avg_t[a]);
++		  
++			}	
++			printk("**************************\n Total Cycles %lld \n",cycles_counter);	
++		}
++	
++		return return_handler;
++		                      
++	}
++	else 
++	{
+ 		vcpu_unimpl(vcpu, "vmx: unexpected exit reason 0x%x\n",
+ 				exit_reason);
+ 		kvm_queue_exception(vcpu, UD_VECTOR);

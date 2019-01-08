@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+<meta name="Submission" content="/tmp/codecheck/17092409297630427173269498570/submission"/>
+<meta name="Problem" content="w5-2"/>
+<meta name="Level" content="1"/>
+<meta name="Time" content="2017-09-24T09:29:21Z"/>
+<meta name="ID" content="MoneyMarketAccount"/>
+<meta name="Elapsed" content="902 ms"/>
+<style type="text/css">
+.header {font-weight: bold; font-size: 1.2em; }
+.item {font-weight: bold;}
+.pass {color: green;}
+.fail {color: red;}
+.note {color: blue; font-weight: bold;}
+table.file td {padding-right: 1em; background: #FFF; }
+.linenumber {color: gray;}
+.footnote {font-size: 0.7em;}
+table {font-size: 0.9em;}
+td, th { background: #EEE; margin: 0.5em; padding: 0.25em;}
+table.output td {vertical-align: top;}
+div.footnotes { border-top: 1px solid gray; padding-top: 0.5em; }
+</style>
+<title>Report</title>
+</head>
+<body>
+<p class="header run">Testing Main.cpp</p>
+<div class="run">
+<pre class="output">
+</pre>
+<pre class="output">390
+The sixth transaction carries a $10 fee
+2390
+...except for deposits &gt; $1000
+2390
+No interest since monthly minimum balance was zero.
+4000
+The $2000 deposit doesn't count towards the free transaction limit.
+4090
+Now there are six transactions.
+4100
+$10 interest is computed on the monthly minimum balance.
+</pre>
+<span class="pass">pass </span></div>
+<p class="header studentFiles">Student files</p>
+<div class="studentFiles">
+<p class="caption">MoneyMarketAccount.cpp:</p>
+<pre>#include "MoneyMarketAccount.h"
+
+MoneyMarketAccount::MoneyMarketAccount()
+{
+   balance = 0;
+   
+}
+
+int count=0;
+int min=0;
+/**
+   Gets the current balance.
+*/
+double MoneyMarketAccount::get_balance() const
+{
+   return balance;
+}
+
+/**
+   Deposits the given amount and deducts any transaction fees.
+*/
+void MoneyMarketAccount::deposit(double amount)
+{
+   
+   balance += amount;
+   if (amount &lt;= 1000)
+   {
+         if(count&gt;4)
+  
+    	  balance-=10;
+    	  
+     count++;    
+   
+   }
+   
+   
+}
+
+/**
+   Withdraws the given amount and deducts any transaction fees.
+*/
+void MoneyMarketAccount::withdraw(double amount)
+{
+   balance -= amount;
+   if(count&gt;4)
+	{
+		balance-=10;
+	}
+	if(balance&lt;min)
+	min=balance;
+	
+   count++;
+   
+}
+
+/**
+   Apply interest, reset month state.
+*/
+void MoneyMarketAccount::end_of_month()
+{
+   balance += min * 0.005; // 0.5 percent
+   count=0;
+   min=balance;
+}
+</pre>
+<p class="caption">MoneyMarketAccount.h:</p>
+<pre>/*
+  The First National Bank of Stroustrup, in its unbounded generosity,
+  gives 0.05% interest on the minimum monthly balance of its money
+  market accounts. The first five transactions per month are free,
+  as are all deposits of amounts exceeding $1000. Each further 
+  transaction (deposit or withdrawal) incur a charge of $10. A balance
+  inquiry does not count as a transaction.
+
+  Complete the following class and its member functions. 
+*/
+
+class MoneyMarketAccount
+{
+private:
+   double balance;
+
+   // Add additional data members ...
+public:
+   /**
+      Constructs an account with a zero balance.
+   */
+   MoneyMarketAccount();
+   /**
+      Gets the current balance.
+   */
+   double get_balance() const;
+   /**
+      Deposits the given amount and deducts any transaction fees.
+      The amount is always &gt; 0.
+   */
+   void deposit(double amount);
+   /**
+      Withdraws the given amount and deducts any transaction fees.
+      The amount is always &gt; 0.
+   */
+   void withdraw(double amount);
+   /**
+      Apply interest, reset month state.
+   */
+   void end_of_month();
+};
+</pre>
+</div>
+<p class="header providedFiles">Provided files</p>
+<div class="providedFiles">
+<p class="caption">Main.cpp:</p>
+<pre>#include &lt;iostream&gt;
+#include "MoneyMarketAccount.h"
+
+using namespace std;
+
+int main()
+{
+   MoneyMarketAccount acct;
+   acct.deposit(100);
+   acct.deposit(100);
+   acct.deposit(100);
+   acct.deposit(100);
+   acct.deposit(100);
+   acct.withdraw(100);
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "The sixth transaction carries a $10 fee" &lt;&lt; endl;
+   acct.deposit(2000);
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "...except for deposits &gt; $1000" &lt;&lt; endl;
+   acct.end_of_month();
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "No interest since monthly minimum balance was zero." &lt;&lt; endl;
+   acct.deposit(100);
+   acct.withdraw(400);
+   acct.withdraw(90); // Minimum monthly balance is $2000
+   acct.deposit(2000);
+   acct.deposit(100);
+   acct.withdraw(100);
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "The $2000 deposit doesn't count towards the free transaction limit." &lt;&lt; endl;
+   acct.deposit(100);
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "Now there are six transactions." &lt;&lt; endl;
+   acct.end_of_month();
+   cout &lt;&lt; acct.get_balance() &lt;&lt; endl;
+   cout &lt;&lt; "$10 interest is computed on the monthly minimum balance." &lt;&lt; endl;  
+   
+   return 0;
+}
+</pre>
+</div>
+<p class="header score">Score</p>
+<div class="score">
+<p class="score">1/1</p>
+</div>
+<div class="footnotes"><div class="footnote">2017-09-24T09:29:21Z</div>
+</div>
+</body></html>

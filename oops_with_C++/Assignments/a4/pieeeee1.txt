@@ -1,0 +1,178 @@
+#include <iostream>
+#include <iomanip>
+#include <mpir.h>
+#include <stdlib.h>
+#include <string.h>
+
+using namespace std
+const int MAX_ITERATIONS = 100;
+const int PLACES         = 1000;        // desired decimal places
+const int PRECISION      = PLACES + 1;  // +1 for the digit 3 before the decimal
+
+const int BASE       = 10;  // base 10 numbers
+const int BIT_COUNT  = 8;   // bits per machine word
+const int BLOCK_SIZE = 10;                // print digits in blocks
+const int LINE_SIZE  = 100;               // digits to print per line
+const int LINE_COUNT = PLACES/LINE_SIZE;  // lines to print
+const int GROUP_SIZE = 5;                 // line grouping size
+void cube_root(mpf_t& x, const mpf_t a)
+{
+    // Use Halley's method:
+    // https://en.wikipedia.org/wiki/Cube_root
+    // Multiple-precision variables
+    mpf_t x_prev;  mpf_init(x_prev);
+    mpf_t temp1;   mpf_init(temp1);
+    mpf_t temp2;   mpf_init(temp2);
+    mpf_t two_a;   mpf_init(two_a);
+    mpf_t x_cubed; mpf_init(x_cubed);
+    // Constant 3
+    mpf_t three; mpf_init(three); mpf_set_str(three, "3", BASE);
+    // Set an initial estimate for x.
+    mpf_div(x, a, three);   // x = a/3
+    int n = 0;  // iteration counter
+ // Loop until two consecutive values are equal
+    // or up to MAX_ITERATIONS times.
+    do
+    {
+        mpf_set(x_prev, x);
+        mpf_mul(x_cubed, x, x);
+        mpf_mul(x_cubed, x_cubed, x);       // x_cubed = x^3
+        mpf_add(two_a, a, a);               // two_a = 2a
+        mpf_add(temp1, x_cubed, two_a);     // temp1 = x^3 + 2a
+        mpf_add(temp2, x_cubed, x_cubed);   // temp2 = 2x^3
+        mpf_add(temp2, temp2, a);           // temp2 = 2x^3 + a
+        mpf_div(temp1, temp1, temp2);       // temp1 = (x^3 + 2a)/(2x^3 + a)
+        mpf_mul(x, x, temp1);               // x = x((x^3 + 2a)/(2x^3 + a))
+        n++;
+    } while ((mpf_cmp(x, x_prev) != 0) && (n < MAX_ITERATIONS));
+}
+void compute_pi(mpf_t& pi)
+{
+    // Use a nonic algorithm:
+    // https://en.wikipedia.org/wiki/Borwein's_algorithm
+    // Multiple-precision constants.
+    mpf_t one;          mpf_init_set_str(one,            "1", BASE);
+    mpf_t two;          mpf_init_set_str(two,            "2", BASE);
+    mpf_t three;        mpf_init_set_str(three,          "3", BASE);
+    mpf_t nine;         mpf_init_set_str(nine,           "9", BASE);
+    mpf_t twenty_seven; mpf_init_set_str(twenty_seven,  "27", BASE);
+
+    mpf_t one_third; mpf_init(one_third);
+    mpf_div(one_third, one, three);
+ // Multiple-precision variables
+    mpf_t a;        mpf_init(a);
+    mpf_t r;        mpf_init(r);
+    mpf_t s;        mpf_init(s);
+    mpf_t t;        mpf_init(t);
+    mpf_t u;        mpf_init(u);
+    mpf_t v;        mpf_init(v);
+    mpf_t w;        mpf_init(w);
+    mpf_t power3;   mpf_init(power3);
+    mpf_t prev_a;   mpf_init(prev_a);
+    // Temporaries
+    mpf_t temp1; mpf_init(temp1);
+    mpf_t temp2; mpf_init(temp2);
+ // Initialize a
+    mpf_set(a, one_third);      // a = 1/3
+    // Initialize r
+    mpf_sqrt(temp1, three);     // temp1 = sqrt(3)
+    mpf_sub(temp1, temp1, one); // temp1 = sqrt(3) - 1
+    mpf_div(r, temp1, two);     // r = (sqrt(3) - 1)/2
+    // Initialize s
+    mpf_mul(temp1, r, r);
+    mpf_mul(temp1, temp1, r);   // temp1 = r^3
+    mpf_sub(temp1, one, temp1); // temp1 = 1 - r^3
+    cube_root(s, temp1);        // s = cbrt(1 - r^3)
+    // Initialize power3
+    mpf_set(power3, one_third);
+ // Loop until two consecutive values are equal
+    // or up to MAX_ITERATIONS times. Iterate at least twice.
+    int n = 0;
+    do
+    {
+        // Save the previous a for later comparison.
+        mpf_set(prev_a, a);             // prev_a = a
+        mpf_div(temp1, one, prev_a);
+        // Compute t
+        mpf_add(temp1, r, r);           // temp1 = 2r
+        mpf_add(t, one, temp1);         // t = 1 + 2r
+
+        // Compute u
+        mpf_add(temp1, one, r);         // temp1 = 1 + r
+        mpf_mul(temp2, r, r);           // temp2 = r^2
+        mpf_add(temp1, temp1, temp2);   // temp1 = 1 + r +r^2
+        mpf_mul(temp1, nine, temp1);
+        mpf_mul(temp1, r, temp1);       // temp1 =  9r(1 + r + r^2)
+        cube_root(u, temp1);            // u = cbrt(9r(1 + r + r^2))
+// Compute v
+        mpf_mul(temp1, t, t);           // temp1 = t^2
+        mpf_mul(temp2, t, u);           // temp2 = tu
+        mpf_add(temp1, temp1, temp2);   // temp1 = t^2 + tu
+        mpf_mul(temp2, u, u);           // temp2 = u^2
+        mpf_add(v, temp1, temp2);       // v = t^2 + tu + u^2
+
+        // Compute w
+        mpf_add(temp1, one, s);         // temp1 = 1 + s
+        mpf_mul(temp2, s, s);           // temp2 = s^2
+        mpf_add(temp1, temp1, temp2);   // temp1 = 1 + s + s^2
+        mpf_mul(temp1, temp1, twenty_seven);    // temp1 = 27(1 + s + s^2)
+        mpf_div(w, temp1, v);           // w = (27(1 + s + s^2))/v
+
+        // Compute next a
+        mpf_mul(temp1, w, a);           // temp1 = wa
+        mpf_sub(temp2, one, w);         // temp2 = 1 - w
+        mpf_mul(temp2, power3, temp2);  // temp2 =  (3^(2n-1))(1 - w)
+        mpf_add(a, temp1, temp2);       // a = wa + (3^(2n-1))(1 - w)
+// Compute next s
+        mpf_sub(temp2, one, r);         // temp2 = 1 - r
+        mpf_mul(temp1, temp2, temp2);
+        mpf_mul(temp1, temp1, temp2);   // temp1 = (1 - r)^3
+        mpf_add(temp2, t, u);
+        mpf_add(temp2, temp2, u);       // temp2 = t + 2u
+        mpf_mul(temp2, temp2, v);       // temp2 = (t + 2u)v
+        mpf_div(s, temp1, temp2);       // s = ((1 - r)^3)/((t + 2u)v)
+        // Compute next r
+        mpf_mul(temp1, s, s);
+        mpf_mul(temp1, temp1, s);       // temp1 = s^3
+        mpf_sub(temp1, one, temp1);     // temp1 = 1 - s^3
+        cube_root(r, temp1);            // r = (1 - s^3)^(1/3)
+// Compute next power of 3
+        mpf_mul(power3, power3, nine);  // power3 = 3^(2n-1)
+        n++;
+    } while (   ((n < 2) || (mpf_eq(a, prev_a, PRECISION) == 0))
+             && (n < MAX_ITERATIONS));
+    // Compute pi = 1/a
+    mpf_div(pi, one, a);
+}
+
+/**
+ * Print the decimal places of a multiple-precision number x.
+ * @param pi the multiple-precision number to print.
+ */
+void print(const mpf_t& pi)
+{
+    mp_exp_t exp;  // exponent (not used)
+    // Convert the multiple-precision number x to a C string.
+    char *str = NULL;
+    char *s = mpf_get_str(str, &exp, BASE, PRECISION, pi);
+    char *p = s+1;  // skip the 3 before the decimal point
+    cout << endl;
+    cout << "3.";
+    char block[BLOCK_SIZE + 1];  // 1 extra for the ending \0
+ // Loop for each line.
+    for (int i = 1; i <= LINE_COUNT; i++)
+    {
+        // Loop to print blocks of digits in each line.
+        for (int j = 0; j < LINE_SIZE; j += BLOCK_SIZE)
+        {
+            strncpy(block, p+j, BLOCK_SIZE);
+            block[BLOCK_SIZE] = '\0';
+            cout << block << " ";
+        }
+        cout << endl << "  ";
+        // Print a blank line for grouping.
+        if (i%GROUP_SIZE == 0) cout << endl << "  ";
+        p += LINE_SIZE;
+    }
+    free(s);
+}

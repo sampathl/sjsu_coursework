@@ -1,0 +1,33 @@
+form {
+  border: 2px solif lightblue;
+  border-radius: 5px;
+  background-color: lightblue;
+  right: 80px;
+  top: 50px;
+  position: fixed;
+  
+  padding:5px 30px;
+}
+
+form{
+  list-style-type: none;
+}
+form a{
+  padding: 5px 0;
+}
+ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
+form h1{
+  margin:0;
+  color:purple;
+}
+
+body{
+  background: lightgrey;
+}
+
+h1{
+  margin:auto;
+}

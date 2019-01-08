@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Created-By: 1.8.0_131 (Oracle Corporation)
+
+Name: codecheck.log
+SHA-256-Digest: IsSgCZBTZIYnopbreraYfnbLEc3U4oR8qeBeYB36HEs=
+
+Name: report.html
+SHA-256-Digest: AQBsMaaqwJQ/Px7sH63doVTe3W+Ccjp/i4oC7tnYpPU=
+
+Name: MoneyMarketAccount.cpp
+SHA-256-Digest: IG7fDJeV72RutfWvhjX70y4Tt2NGVV1Igwtg/9JPQ/w=
+
+Name: codecheck.out
+SHA-256-Digest: 47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=
+
+Name: MoneyMarketAccount.h
+SHA-256-Digest: s7QJeG5ZO+/xAJV8N5IKAdL4pjPqYM5MQ60Dra89euo=
+
