@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "edu.sjsu.cmpe273.fall18.lab2";
+option java_outer_classname = "CalculatorProto";
+option objc_class_prefix = "CALC";
+
+package calculator;
+
+// The add service definition.
+service Calculator {
+  // perform addition
+  rpc AddNumbers (AddRequest) returns (AddReponse) {}
+}
+
+// Request containing two numbers
+message AddRequest {
+  int32 num1 = 1;
+  int32 num2 = 2;
+}
+
+// Response containing result of adding numbers
+message AddReponse {
+  int32 result = 1;
+}
