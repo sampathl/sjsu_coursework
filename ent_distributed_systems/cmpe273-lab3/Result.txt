@@ -1,0 +1,21 @@
+The Connected UDP:
+
+D:\cmpe273\lab3>py connected_udp_server.py
+IP of 'localhost' is 127.0.0.1
+
+
+D:\cmpe273\lab3>py connected_udp_client.py
+now we can only send to host 127.0.0.1 port 8800
+No one listening
+
+
+
+
+The Multicast: 
+D:\cmpe273\lab3>py multicast_udp_server.py
+Datagram b'Client: Ping' received from ('192.168.56.1', 9999)
+Datagram b'Server: Pong' received from ('192.168.56.1', 9999)
+
+
+D:\cmpe273\lab3>py multicast_udp_client.py
+Datagram b'Client: Ping' received from ('192.168.56.1', 9999)

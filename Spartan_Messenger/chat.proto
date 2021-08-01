@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+service spartan_Messenger{
+    rpc add_User (user_info) returns (empty); //service for adding a user
+    rpc remove_User (user_info) returns (status); // service for removing the user from the active
+    rpc get_Status (user_info) returns (status); // service for getting status of a user
+    rpc post_Message (chat_format) returns (status);  // service for sending a message
+    rpc get_Messages (empty) returns (chat_format); // service for receiving a message
+    rpc test (empty) returns(empty);
+}
+
+message empty {
+} // An empty message 
+message status{
+    string status_info =1; // string for sending the message for status of the request or friend or group
+} 
+
+message chat_format {
+    string user_name = 1; // string for user information
+    string receiving_user =2; // string for receiver information 
+    string chat_message =3; // string for message passing
+}
+
+message user_info {
+    string user_name =1; // string for user information 
+    string receiving_user=2; // string for reciever information 
+}

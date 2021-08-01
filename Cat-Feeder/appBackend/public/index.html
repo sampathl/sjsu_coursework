@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cat Bistro</title>
+
+    <!-- <link rel="stylesheet" href="/stylesheets/style.css"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <div class="container-fluid">
+    <div id="homepage">
+      <h1 align="center">Welcome to the Cat Bistro</h1>
+
+        <div class="row">
+          <div class="col-sm-3 col-md-6" style="background-color:yellow;">
+      <div id="bistro"></div>
+    </div>
+    <div class="col-sm-3 col-md-6" style="background-color:yellow;">
+      <div id="bistroinput"></div>
+      <div>
+    </div>
+    </div>
+  </div>
+  </body>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://unpkg.com/react@15/dist/react.js"></script>
+  <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+  <script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"></script>
+
+
+  <script type="text/babel">
+
+  var Bistro = React.createClass({
+    getInitialState: function(){
+      return({
+        //feedip:[],
+        feedreport:[]
+      });
+    },
+    render: function(){
+      var feedreport = this.state.feedreport;
+      feedreport = feedreport.map(function(data, index){
+        console.log(data)
+        return(
+          <li key={index}>
+          <p>Details</p>
+            <p>Feeder Name: {data.feedername}</p>
+            <p>Feed time {data.lastfeedtime}</p>
+            <p>Cat weight {data.catwt}</p>
+            <p>Cat weight {data.lastfoodwt}</p>
+          </li>
+        );
+      });
+
+      return(
+        <div class="container">
+
+        <div id="feedreport">
+        <form id="feed" onSubmit={this.handleSubmit}>
+        <label>Enter the feedername:</label>
+        <input type="text" ref="fname" placeholder="feedername" required/>
+        <input type="submit" value="Get Report"/>
+        </form>
+        <ul>{feedreport}</ul>
+        </div>
+
+        </div>
+
+      );
+    },
+    handleSubmit: function(e){
+      e.preventDefault();
+      var fdname = this.refs.fname;
+      var fdtime = this.refs.ftime;
+      var fdwt = this.refs.fwt;
+
+      fetch('http://localhost:3001/api/getfeedreport').then(function(response){
+      //fetch('http://localhost:3001/api/feedcat').then(function(response){
+        //console.log(response);
+        return response.json();
+      }).then(json => {
+        console.log(json);
+        this.setState({
+          feedreport:json
+        });
+      });
+    }
+
+  });
+
+
+
+
+//Component to schedule
+
+
+var Schedule = React.createClass({
+  getInitialState: function(){
+    return({
+      feedip:[]
+    });
+  },
+
+  //post data to mongo.
+
+  postData: function(e){
+    var fdname = this.refs.fname.value;
+    var fdtime = this.refs.ftime.value;
+    var fdwt = this.refs.fwt.value;
+    axios.post('http://localhost:3001/api/feedcat', {fdname , fdtime, fdwt})
+    .then(json => {
+      console.log(json);
+      this.setState({
+        feedip:json
+      });
+    });
+    e.preventDefault();
+  },
+
+  render: function(){
+
+    //var feedreport = this.state.feedreport;
+    var feedip = this.state.feedip;
+    console.log(feedip);
+    var myarr = new Array();
+    myarr.push(feedip);
+    feedip = myarr.map(function(data, index){
+    console.log(data);
+    //console.log(data.data[0].ok);
+    //console.log();
+      if(data.status == 200){
+        return(
+          <li key={index}>
+          <p>Success</p>
+            <p>Feeder set to dispense food</p>
+          </li>
+        );
+      }
+    });
+
+
+
+    return(
+      <div id="feedip">
+      <form className="well" id="feed" onSubmit={this.postData}>
+      <label>Enter the feedername:</label>
+      <input type="text" ref="fname" placeholder="feedername" required/><br/>
+      <label>Enter the feed scheduled time:</label>
+      <input type="datetime-local" ref="ftime" placeholder="feedertime" required/><br/>
+      <label>Enter the weight to dispense:</label>
+      <input type="text" ref="fwt" placeholder="feederweight" required/><br/>
+      <input type="submit" value="Schedule Feed"/>
+      </form>
+      <ul>{feedip}</ul>
+      </div>
+
+    );
+  },
+
+
+});
+
+
+  ReactDOM.render(<Bistro />, document.getElementById('bistro'));
+  ReactDOM.render(<Schedule />, document.getElementById('bistroinput'));
+
+  </script>
+
+
+
+
+</html>

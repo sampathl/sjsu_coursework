@@ -1,0 +1,24 @@
+layer_1_conv.model:
+
+Epoch 00123: val_loss did not improve from 0.54279
+Epoch 124/1000
+33600/33600 [==============================] - 21s 622us/step - loss: 0.5448 - acc: 0.8131 - val_loss: 0.5471 - val_acc: 0.8174
+
+Epoch 00124: val_loss did not improve from 0.54279
+Epoch 00124: early stopping
+
+layer_2_conv.model:
+
+Epoch 00044: val_loss did not improve from 0.08456
+Epoch 45/1000
+33600/33600 [==============================] - 38s 1ms/step - loss: 0.0555 - acc: 0.9821 - val_loss: 0.0854 - val_acc: 0.9756
+
+Epoch 00045: val_loss did not improve from 0.08456
+Epoch 00045: early stopping
+
+Epoch 00042: val_loss did not improve from 0.03400
+Epoch 43/1000
+33600/33600 [==============================] - 58s 2ms/step - loss: 0.0477 - acc: 0.9870 - val_loss: 0.0416 - val_acc: 0.9898
+
+Epoch 00043: val_loss did not improve from 0.03400
+Epoch 00043: early stopping

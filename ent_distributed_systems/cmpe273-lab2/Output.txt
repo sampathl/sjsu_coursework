@@ -1,0 +1,6 @@
+Server CMD:
+D:\cmpe273\lab2\grpc\examples\python\Calculator>py calculator_server.py
+
+client CMD:
+D:\cmpe273\lab2\grpc\examples\python\Calculator>py calculator_client.py
+Addition request received and sum: 6

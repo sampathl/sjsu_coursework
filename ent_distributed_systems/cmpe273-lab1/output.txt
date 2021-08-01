@@ -1,0 +1,11 @@
+
+D:\Course\cmpe273\lab1>py http_call.py
+call 1 at Fri, 07 Sep 2018 06:08:27 GMT
+call 2 at Fri, 07 Sep 2018 06:08:28 GMT
+call 3 at Fri, 07 Sep 2018 06:08:29 GMT
+
+D:\Course\cmpe273\lab1>py http_async_call.py
+asyncronous
+Fri, 07 Sep 2018 06:08:34 GMT
+Fri, 07 Sep 2018 06:08:34 GMT
+Fri, 07 Sep 2018 06:08:34 GMT
